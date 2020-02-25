@@ -82,6 +82,7 @@ abstract class _HomeBase with Store {
   }) async {
     isLoading = true;
     message = null;
+    dynamic _chat;
     try {
       await createOrGet(hasuraConnect, name);
 
@@ -90,24 +91,24 @@ abstract class _HomeBase with Store {
         variables: {"chat": chat},
       );
 
-      final _chat = _response['data']['chat'];
+      _chat = _response['data']['chat'];
 
       if (_chat.isNotEmpty) {
+        final _chatModel = ChatModel.fromJson(_chat[0]);
+
+        if (_chatModel.friend == null) {
+          if (_chatModel.user != name) {
+            final _response = await hasuraConnect.mutation(
+              _enterChat,
+              variables: {"id": chat},
+            );
+
+            _chat = _response['data']['update_chat']['returning'];
+          }
+        }
+
         this.chatModel = ChatModel.fromJson(_chat[0]);
 
-        if (chatModel.friend == null) {
-          
-          if (chatModel.user == name) {
-            isLoading = false;
-            return;
-          }
-          final _response = await hasuraConnect.mutation(
-            _enterChat,
-            variables: {"id": chat},
-          );
-          final _chat = _response['data']['update_chat']['returning'];
-          this.chatModel = ChatModel.fromJson(_chat[0]);
-        }
         isLoading = false;
       } else {
         final _response = await hasuraConnect.mutation(
@@ -115,14 +116,14 @@ abstract class _HomeBase with Store {
           variables: {"id": chat},
         );
 
-        final _chat = _response['data']['insert_chat']['returning'];
+        _chat = _response['data']['insert_chat']['returning'];
         this.chatModel = ChatModel.fromJson(_chat[0]);
         isLoading = false;
       }
     } on HasuraError catch (e) {
       isLoading = false;
       e.message.contains("chat_id_key")
-          ? this.message = "Sala já existe e está lotada"
+          ? this.message = "Escolha outra sala na qual não esteja sendo usada"
           : null;
     } catch (e) {
       isLoading = false;

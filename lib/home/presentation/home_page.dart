@@ -12,10 +12,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final homeController = Home();
-  final nameController = TextEditingController(text: "danielmessi13");
+  Home homeController;
+  final nameController = TextEditingController(text: "danielmessi1311");
   final chatController = TextEditingController(text: '123');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void didChangeDependencies() {
+    homeController = Provider.of<Home>(context);
+
+    reaction(
+      (_) => homeController.chatModel,
+      (_) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatPage(),
+          ),
+        );
+      },
+    );
+
+    reaction(
+      (_) => homeController.message,
+      (_) => _scaffoldKey.currentState
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(homeController.message),
+          ),
+        ),
+    );
+    super.didChangeDependencies();
+  }
 
   @override
   void dispose() {
@@ -36,31 +65,6 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Observer(builder: (_) {
-          print("CHAT: " + homeController.chatModel.toString());
-
-          when(
-            (_) => homeController.chatModel != null,
-            () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(
-                    chat: homeController.chatModel,
-                  ),
-                ),
-              );
-            },
-          );
-
-          when(
-            (_) => homeController.message != null,
-            () => _scaffoldKey.currentState.showSnackBar(
-              SnackBar(
-                content: Text(homeController.message),
-              ),
-            ),
-          );
-
           if (homeController.isLoading) {
             return Center(
               child: CircularProgressIndicator(),

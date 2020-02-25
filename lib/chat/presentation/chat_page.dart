@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hasura_other_level/chat/store/chat_store.dart';
+import 'package:hasura_other_level/home/store/home_store.dart';
+import 'package:provider/provider.dart';
 
 import '../../home/models/chat.dart';
 
 class ChatPage extends StatefulWidget {
-  final ChatModel chat;
-
-  ChatPage({
-    Key key,
-    @required this.chat,
-  }) : super(key: key);
-
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -28,9 +23,11 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final homeController = Provider.of<Home>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sala: " + widget.chat.id),
+        title: Text("Sala: " + homeController.chatModel.id),
       ),
       body: Observer(
         builder: (_) => Container(

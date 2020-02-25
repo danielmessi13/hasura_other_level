@@ -11,4 +11,5 @@ abstract class _ChatBase with Store {
   Future<bool> sendMessage() async {
     return true;
   }
+
 }
