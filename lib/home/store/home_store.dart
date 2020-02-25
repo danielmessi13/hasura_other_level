@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hasura_connect/hasura_connect.dart';
-import 'package:hasura_other_level/chat/presentation/chat_page.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/chat.dart';
