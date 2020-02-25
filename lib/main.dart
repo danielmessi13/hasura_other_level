@@ -14,7 +14,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Hasura Zap',
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primaryColor: Colors.green[800],
+          buttonColor: Colors.green[800],
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: Colors.green[800],
+          ),
         ),
         home: HomePage(),
       ),

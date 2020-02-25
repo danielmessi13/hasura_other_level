@@ -18,31 +18,6 @@ class _HomePageState extends State<HomePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    when(
-      (_) => homeController.chatModel != null,
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ChatPage(
-            chat: homeController.chatModel,
-          ),
-        ),
-      ),
-    );
-
-    when(
-      (_) => homeController.message != null,
-      () => _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text(homeController.message),
-        ),
-      ),
-    );
-    super.initState();
-  }
-
-  @override
   void dispose() {
     nameController.dispose();
     chatController.dispose();
@@ -61,6 +36,31 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         child: Observer(builder: (_) {
+          print("CHAT: " + homeController.chatModel.toString());
+
+          when(
+            (_) => homeController.chatModel != null,
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatPage(
+                    chat: homeController.chatModel,
+                  ),
+                ),
+              );
+            },
+          );
+
+          when(
+            (_) => homeController.message != null,
+            () => _scaffoldKey.currentState.showSnackBar(
+              SnackBar(
+                content: Text(homeController.message),
+              ),
+            ),
+          );
+
           if (homeController.isLoading) {
             return Center(
               child: CircularProgressIndicator(),

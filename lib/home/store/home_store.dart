@@ -93,10 +93,14 @@ abstract class _HomeBase with Store {
       final _chat = _response['data']['chat'];
 
       if (_chat.isNotEmpty) {
-        print('e');
         this.chatModel = ChatModel.fromJson(_chat[0]);
 
         if (chatModel.friend == null) {
+          
+          if (chatModel.user == name) {
+            isLoading = false;
+            return;
+          }
           final _response = await hasuraConnect.mutation(
             _enterChat,
             variables: {"id": chat},
