@@ -1,11 +1,11 @@
-class Chat {
+class ChatModel {
   String user;
   String id;
   String friend;
 
-  Chat({this.user, this.id, this.friend});
+  ChatModel({this.user, this.id, this.friend});
 
-  Chat.fromJson(Map<String, dynamic> json) {
+  ChatModel.fromJson(Map<String, dynamic> json) {
     user = json['user'];
     id = json['id'];
     friend = json['friend'];
