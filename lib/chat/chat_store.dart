@@ -2,6 +2,7 @@ import 'package:hasura_connect/hasura_connect.dart';
 import 'package:hasura_other_level/chat/models/message.dart';
 import 'package:hasura_other_level/home/models/chat.dart';
 import 'package:mobx/mobx.dart';
+
 part 'chat_store.g.dart';
 
 class Chat = _ChatBase with _$Chat;
@@ -17,7 +18,7 @@ abstract class _ChatBase with Store {
   String _getMessagesSubscription = '''
     subscription GetMessages (\$chatId : String!) {
       chat(where: {id: {_eq: \$chatId}}) {
-        messages (order_by: {created_at: asc}){
+        messages (order_by: {created_at: desc}){
           user
           friend
           text

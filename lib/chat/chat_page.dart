@@ -1,9 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:hasura_other_level/core/core_store.dart';
-import 'package:hasura_other_level/home/home_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
@@ -23,19 +20,9 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final _messageController = TextEditingController();
-  final _listController = ScrollController();
+  final _listController = ScrollController(initialScrollOffset: 0);
   Chat _chatController;
   Core _coreController;
-
-  @override
-  void initState() {
-    _listController.addListener(listenerScroll);
-    super.initState();
-  }
-
-  listenerScroll() {
-    print("opa");
-  }
 
   @override
   void dispose() {
@@ -52,7 +39,7 @@ class _ChatPageState extends State<ChatPage> {
     );
 
     reaction((_) => _chatController.messages, (_) {
-      _listController.jumpTo(_listController.position.maxScrollExtent + 100);
+      _listController.jumpTo(0);
     });
 
     super.didChangeDependencies();
@@ -89,6 +76,7 @@ class _ChatPageState extends State<ChatPage> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     controller: _listController,
+                    reverse: true,
                     itemCount: _chatController.messages.length,
                     itemBuilder: (_, index) {
                       if (_chatController.messages.isEmpty &&
@@ -96,11 +84,6 @@ class _ChatPageState extends State<ChatPage> {
                         return Center(
                           child: CircularProgressIndicator(),
                         );
-                      }
-
-                      if (index == 0 && _chatController.messages.isNotEmpty) {
-                        print('aq');
-                        _listController.notifyListeners();
                       }
 
                       if (_chatController.messages[index].user != user) {
