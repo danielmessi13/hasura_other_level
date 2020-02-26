@@ -6,6 +6,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
 import 'home_store.dart';
+import 'models/chat.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,27 +15,31 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Home homeController;
-  final nameController = TextEditingController(text: "danielmessi13");
+  final nameController = TextEditingController(text: "danielmessi13112");
   final chatController = TextEditingController(text: '123');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  ReactionDisposer reactionChat;
+  ReactionDisposer reactionError;
 
   @override
   void didChangeDependencies() {
     homeController = Provider.of<Home>(context);
 
-    reaction(
+    reactionChat = reaction(
       (_) => homeController.chatModel,
-      (_) {
-        Navigator.push(
+      (ChatModel a) {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatPage(),
+            builder: (context) => ChatPage(
+              chatModel: a,
+            ),
           ),
         );
       },
     );
 
-    reaction(
+    reactionError = reaction(
       (_) => homeController.message,
       (_) => _scaffoldKey.currentState
         ..removeCurrentSnackBar()
@@ -45,13 +50,6 @@ class _HomePageState extends State<HomePage> {
         ),
     );
     super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    chatController.dispose();
-    super.dispose();
   }
 
   @override

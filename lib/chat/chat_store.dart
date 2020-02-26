@@ -17,7 +17,7 @@ abstract class _ChatBase with Store {
   String _getMessagesSubscription = '''
     subscription GetMessages (\$chatId : String!) {
       chat(where: {id: {_eq: \$chatId}}) {
-        messages {
+        messages (order_by: {created_at: asc}){
           user
           friend
           text

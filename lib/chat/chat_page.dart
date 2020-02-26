@@ -7,11 +7,16 @@ import 'package:hasura_other_level/home/home_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 
+import '../home/home_page.dart';
+import '../home/models/chat.dart';
 import 'chat_store.dart';
 import 'widgets/card_message.dart';
 import 'widgets/text_field_custom.dart';
 
 class ChatPage extends StatefulWidget {
+  final ChatModel chatModel;
+
+  const ChatPage({Key key, @required this.chatModel}) : super(key: key);
   @override
   _ChatPageState createState() => _ChatPageState();
 }
@@ -19,9 +24,18 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final _messageController = TextEditingController();
   final _listController = ScrollController();
-  Home _homeController;
   Chat _chatController;
   Core _coreController;
+
+  @override
+  void initState() {
+    _listController.addListener(listenerScroll);
+    super.initState();
+  }
+
+  listenerScroll() {
+    print("opa");
+  }
 
   @override
   void dispose() {
@@ -31,15 +45,14 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void didChangeDependencies() {
-    _homeController = Provider.of<Home>(context);
     _coreController = Provider.of<Core>(context);
     _chatController = Chat(
-      _homeController.chatModel,
+      widget.chatModel,
       _coreController.hasuraConnect,
     );
 
     reaction((_) => _chatController.messages, (_) {
-      _listController.jumpTo(_listController.position.maxScrollExtent + 300);
+      _listController.jumpTo(_listController.position.maxScrollExtent + 100);
     });
 
     super.didChangeDependencies();
@@ -48,15 +61,23 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     final user = _coreController.hasuraConnect.headers['x-hasura-user-id'];
-    Timer(
-      Duration(milliseconds: 100),
-      () =>
-          _listController.jumpTo(_listController.position.maxScrollExtent + 10),
-    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Sala: " + _homeController.chatModel.id),
+        title: Text("Sala: " + widget.chatModel.id),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: Observer(
         builder: (_) {
@@ -68,12 +89,18 @@ class _ChatPageState extends State<ChatPage> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     controller: _listController,
+                    itemCount: _chatController.messages.length,
                     itemBuilder: (_, index) {
                       if (_chatController.messages.isEmpty &&
                           _chatController.loading) {
                         return Center(
                           child: CircularProgressIndicator(),
                         );
+                      }
+
+                      if (index == 0 && _chatController.messages.isNotEmpty) {
+                        print('aq');
+                        _listController.notifyListeners();
                       }
 
                       if (_chatController.messages[index].user != user) {
@@ -90,7 +117,6 @@ class _ChatPageState extends State<ChatPage> {
                         );
                       }
                     },
-                    itemCount: _chatController.messages.length,
                   ),
                 ),
                 Provider(

@@ -21,13 +21,19 @@ class CardMessage extends StatelessWidget {
           : EdgeInsets.only(left: 40, bottom: 10),
       child: ListTile(
         title: Text(
+          sender,
+          textAlign: received ? TextAlign.left : TextAlign.right,
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.width * 0.040,
+          ),
+        ),
+        subtitle: Text(
           message,
-          textAlign: received ? TextAlign.right : TextAlign.left,
+          textAlign: received ? TextAlign.left : TextAlign.right,
           style: TextStyle(
             fontSize: MediaQuery.of(context).size.width * 0.050,
           ),
         ),
-      
       ),
     );
   }
