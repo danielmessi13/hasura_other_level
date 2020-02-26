@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:hasura_other_level/chat/presentation/chat_page.dart';
+import 'package:hasura_other_level/chat/chat_page.dart';
 import 'package:hasura_other_level/core/core_store.dart';
-import 'package:hasura_other_level/home/store/home_store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
+
+import 'home_store.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Home homeController;
-  final nameController = TextEditingController(text: "danielmessi1311");
+  final nameController = TextEditingController(text: "danielmessi13");
   final chatController = TextEditingController(text: '123');
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 

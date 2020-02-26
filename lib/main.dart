@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hasura_other_level/core/core_store.dart';
-import 'package:hasura_other_level/home/store/home_store.dart';
 import 'package:provider/provider.dart';
 
-import 'home/presentation/home_page.dart';
+import 'home/home_page.dart';
+import 'home/home_store.dart';
+
 
 void main() => runApp(MyApp());
 

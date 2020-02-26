@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hasura_connect/hasura_connect.dart';
 import 'package:mobx/mobx.dart';
 
-import '../models/chat.dart';
+import 'models/chat.dart';
+
 part 'home_store.g.dart';
 
 class Home = _HomeBase with _$Home;
