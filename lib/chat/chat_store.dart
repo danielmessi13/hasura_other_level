@@ -8,10 +8,10 @@ part 'chat_store.g.dart';
 class Chat = _ChatBase with _$Chat;
 
 abstract class _ChatBase with Store {
-  final ChatModel _chatModel;
+  final ChatModel chatModel;
   final HasuraConnect _hasuraConnect;
 
-  _ChatBase(this._chatModel, this._hasuraConnect) {
+  _ChatBase(this.chatModel, this._hasuraConnect) {
     getMessages();
   }
 
@@ -29,7 +29,7 @@ abstract class _ChatBase with Store {
   ''';
 
   String _sendMessage = '''
-  mutation SendMessage (\$chatId: String!, \$msg: String!, \$friend: String!){
+  mutation SendMessage (\$chatId: String!, \$msg: String!, \$friend: String){
     insert_message(objects: {chat_id: \$chatId, text: \$msg, friend: \$friend}) {
       affected_rows
     }
@@ -47,8 +47,8 @@ abstract class _ChatBase with Store {
     try {
       await _hasuraConnect.mutation(_sendMessage, variables: {
         "msg": message,
-        "chatId": _chatModel.id,
-        "friend": _chatModel.friend,
+        "chatId": chatModel.id,
+        "friend": chatModel.friend,
       });
       return true;
     } catch (e) {
@@ -63,16 +63,26 @@ abstract class _ChatBase with Store {
     try {
       _hasuraConnect.subscription(
         _getMessagesSubscription,
-        variables: {"chatId": _chatModel.id},
-        
+        variables: {"chatId": chatModel.id},
       ).listen((event) {
         loading = false;
         messages = (event['data']['chat'][0]['messages'] as List)
             .map((i) => Message.fromJson(i))
             .toList();
+
+
+        try {
+          final friend = messages
+              .where((element) => element?.friend != null)
+              .toList()
+              .first
+              .friend;
+          chatModel.friend == null && friend != null
+              ? chatModel.friend = friend
+              : null;
+        } catch (e) {}
       });
     } catch (e) {
-      print(e);
       loading = false;
     }
   }

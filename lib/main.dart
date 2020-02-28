@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Hasura Zap',
         theme: ThemeData(
-          primaryColor: Colors.green[800],
-          buttonColor: Colors.green[800],
+          primaryColor:  Color(0xFF6938F1),
+          buttonColor:  Color(0xFF6938F1),
           floatingActionButtonTheme: FloatingActionButtonThemeData(
-            backgroundColor: Colors.green[800],
+            backgroundColor:  Color(0xFF6938F1),
           ),
         ),
         home: HomePage(),
