@@ -50,6 +50,7 @@ class _ChatPageState extends State<ChatPage> {
     final user = _coreController.hasuraConnect.headers['x-hasura-user-id'];
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Sala: " + widget.chatModel.id),
         actions: <Widget>[
@@ -69,7 +70,7 @@ class _ChatPageState extends State<ChatPage> {
       body: Observer(
         builder: (_) {
           return Container(
-            margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+            margin: EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: <Widget>[
                 Expanded(

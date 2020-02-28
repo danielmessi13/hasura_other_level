@@ -15,8 +15,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Home homeController;
-  final nameController = TextEditingController();
-  final chatController = TextEditingController();
+  final nameController = TextEditingController(text: "danielmessi13");
+  final chatController = TextEditingController(text: "123");
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   ReactionDisposer reactionChat;
   ReactionDisposer reactionError;

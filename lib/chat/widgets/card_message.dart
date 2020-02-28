@@ -14,27 +14,71 @@ class CardMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: received ? Colors.grey : Theme.of(context).primaryColor,
-      margin: received
-          ? EdgeInsets.only(right: 40, bottom: 10)
-          : EdgeInsets.only(left: 40, bottom: 10),
-      child: ListTile(
-        title: Text(
-          sender,
-          textAlign: received ? TextAlign.left : TextAlign.right,
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.040,
+    final double radius = 35;
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      children: <Widget>[
+        !received
+            ? Expanded(
+                child: Container(),
+              )
+            : Container(),
+        Expanded(
+          flex: message.length > 20 ? 3 : 1,
+          child: Container(
+            decoration: BoxDecoration(
+              color:
+                  received ? Colors.grey[200] : Theme.of(context).primaryColor,
+              gradient: !received
+                  ? LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Theme.of(context).primaryColor,
+                        Theme.of(context).primaryColor.withOpacity(0.8),
+                        Theme.of(context).primaryColor.withOpacity(0.6),
+                      ],
+                    )
+                  : null,
+              borderRadius: received
+                  ? BorderRadius.only(
+                      bottomRight: Radius.circular(radius),
+                      topRight: Radius.circular(radius),
+                    )
+                  : BorderRadius.only(
+                      bottomLeft: Radius.circular(radius),
+                      topLeft: Radius.circular(radius),
+                    ),
+            ),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 10,
+              ),
+              title: Text(
+                sender,
+                textAlign: received ? TextAlign.left : TextAlign.right,
+                // style: TextStyle(
+                //   fontSize: MediaQuery.of(context).size.width * 0.040,
+                // ),
+              ),
+              subtitle: Text(
+                message,
+                textAlign: received ? TextAlign.left : TextAlign.right,
+                // style: TextStyle(
+                //   fontSize: MediaQuery.of(context).size.width * 0.050,
+                // ),
+              ),
+            ),
           ),
         ),
-        subtitle: Text(
-          message,
-          textAlign: received ? TextAlign.left : TextAlign.right,
-          style: TextStyle(
-            fontSize: MediaQuery.of(context).size.width * 0.050,
-          ),
-        ),
-      ),
+        received
+            ? Expanded(
+                child: Container(),
+              )
+            : Container(),
+      ],
     );
   }
 }
